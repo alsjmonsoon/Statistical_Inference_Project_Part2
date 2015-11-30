@@ -1,8 +1,5 @@
----
-output: word_document
----
 ###Tooth growth length in response to orange juice and ascorbic acid in guinea pigs
-November 21, 2015"
+November 21, 2015
 
 ####**Oveview**
 
