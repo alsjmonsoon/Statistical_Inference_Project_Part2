@@ -1,0 +1,174 @@
+---
+output: word_document
+---
+###Tooth growth length in response to orange juice and ascorbic acid in guinea pigs
+November 21, 2015"
+
+####**Oveview**
+
+In this Project, I anlayzed the ToothGrowth Data. This data documents the response of the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid). 
+
+####**1. summary of the data**
+This data frame with 60 observations on 3 variables:
+-len (a numeric factor), which is the Tooth length; 
+-supp (a factor variable), which stands for Supplement type (VC-ascorbic acid or Orange juice); 
+-dose (a numeric factor), which is the dose level (0.5,1, and 2mg) for each treatment in milligrams. 
+I conducted the exploratory data analyses in Appendix 1, where supplementary figure 1 show the boxplot of two different treatments and three dose levels. Also in Appendix 2 and printed table, I calcualted the mean and standard deviation of each treatment and their assoicated dosages. From the prelimiary analyese, it is quite clear that the mean of each treatment and dosage are quite different. To be sure, I perform statitstical analyses below.
+
+####**2. Confidence interval testing**
+According to prelimiary analyses above, I tested following hypothesis individually (by only considering the techniques we learned from this class).
+
+#####**2a) Test A. Do teeth growths respond to different dosages of ascorbic acid (VC) differently? In another word, when given different dosages of VC, did the teeth growth length differ?**
+**Assumptions for the test**: i). these are independent samples for each group to be tested. ii). The sample for each group is normally distributed. iii). The population standard deviation is not the same (see appendix 2).    
+**hypothesis teseting**    
+Null hypothesis ($H_0$): the teeth growth length responded to 0.5 and 1 mg, 1 and 2mg, 0.5 and 2mg of VC the same.  
+Althernative hypothesis($H_a$): the teeth growth length responded to different dosages of VC differently.  
+Given the sample sizes are small (10 for each dose and the population variance is unknown, t-test would be more appropriate)  
+```{r testA, echo=TRUE,warning=FALSE,message=FALSE}
+require(dplyr)
+require(rtf)
+VC0.5<-ToothGrowth%>%filter(supp=="VC" & dose==0.5)%>%select(len) # grab data for VC dose0.5
+VC1<-ToothGrowth%>%filter(supp=="VC" & dose==1)%>%select(len) #grab data for VC dose 1
+VC2<-ToothGrowth%>%filter(supp=="VC" & dose==2)%>%select(len) #grab data for VC dose 2
+VCpValues<-rbind(
+  t.test(VC1, VC0.5, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(VC2, VC1, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(VC2, VC0.5, paired = FALSE, var.equal = FALSE)$p.value
+) #compare p-values
+VCconfidence<-rbind(
+  t.test(VC1, VC0.5, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(VC2, VC1, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(VC2, VC0.5, paired = FALSE, var.equal = FALSE)$conf.int
+) #compare 95% Confidence interval
+VCsummary<-data.frame(cbind(VCpValues,VCconfidence))
+VCsummary$compared.groups<-factor(c("VC1~VC0.5","VC2~VC1","VC2~VC0.5"))
+colnames(VCsummary)<-c("p.value","low_conf.int","upper_conf.int","compared.groups")
+print(VCsummary)
+rtffile <- RTF("VCsummary.doc")  # this can be an .rtf or a .doc
+addParagraph(rtffile, "Table 1 t- statistic for VC treatment ")
+addTable(rtffile, as.data.frame(VCsummary))
+done(rtffile)
+```
+**_Intrepretation and conclusion for table 1_**: Given the p-value for each compared pair are smaller than 0.05, this suggest that at 5% significance level, I conclude tooth growth length are not equal for 0.5, 1, and 2mg VC treatment. Simlarly, looking at the confidence intervals (CI) for each compared group,  I can see that all CI are greater than 0, and this confirms that the higher dosage is more effective than the lower dose VC treatment (please note the way I use t.test(), always in the order of high vs. low dose).
+
+
+#####2b)**Test B. Do teeth growths respond to different dosages of orange juice (OJ) differently? In another word, when given different dosages of OJ, did the teeth growth length differ?**
+**Assumptions for the test**: i). these are independent samples for each group; ii). The sample is normally distributed. iii). The population standard deviation is not the same (see appendix 2).  
+**hypothesis teseting**:  
+Null hypothesis ($H_0$): the teeth growth length responded to 0.5 and 1 mg, 1 and 2mg, 0.5 and 2mg of OJ the same.
+Althernative hypothesis($H_a$) : the teeth growth length responded to different dosages of OJ differently.
+Given the sample sizes are small (10) for each dose and the population variance is unknown, t-test would be more appropriate)(please note, that I compared the data in pairs)
+```{r testB, echo=TRUE,warning=FALSE,message=FALSE,cache=TRUE}
+require(dplyr)
+OJ0.5<-ToothGrowth%>%filter(supp=="OJ" & dose==0.5)%>%select(len) #grab data for OJ dose 0.5
+OJ1<-ToothGrowth%>%filter(supp=="OJ" & dose==1)%>%select(len) #grab data for OJ dose 1
+OJ2<-ToothGrowth%>%filter(supp=="OJ" & dose==2)%>%select(len) #grab data for OJ dose 2
+OJpValues<-rbind(
+  t.test(OJ1, OJ0.5, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(OJ2, OJ1, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(OJ2, OJ0.5, paired = FALSE, var.equal = FALSE)$p.value
+) #compare p-values
+OJconfidence<-rbind(
+  t.test(OJ1, OJ0.5, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(OJ2, OJ1, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(OJ2, OJ0.5, paired = FALSE, var.equal = FALSE)$conf.in
+) #compare 95% Confidence interval
+OJsummary<-data.frame(cbind(OJpValues,OJconfidence))
+OJsummary$compared.groups<-factor(c("OJ1~OJ0.5","OJ2~OJ1","OJ2~OJ0.5"))
+colnames(OJsummary)<-c("p.value","low_conf.int","upper_conf.int","compared.groups")
+print(OJsummary)
+# write table directly to word document
+rtffile <- RTF("OJsummary.doc")  # this can be an .rtf or a .doc
+addParagraph(rtffile, "Table 2 t- statistic for OJ treatment ")
+addTable(rtffile, as.data.frame(OJsummary))
+done(rtffile)
+```
+**_Intrepretation and conclusion for table 2_**: Similarly to VC treatment, the p-value for each compared group of OJ treatment are also smaller than 0.05, this suggest that at 5% significance level, tooth growth length are not equal for 0.5,1, and 2mg OJ treatment. Also, the confidence interval (CI) for each compared groups are greater than 0, that suggests the tooth growth of each compared group are different at 95% CI. Also, all CI are greater than 0, and this confirms **that the higher dosage is more effective than the lower dose OJ treatment** (please note the way I use t.test(), always in the order of high vs. low dose). Please also note the low end of CI (0.19) for OJ2 and OJ1 is quite close to 0, this is probably due to the outlier in the OJ1 group (see supplemenatry figure 1). 
+
+
+#####2c)**Test C. Do teeth growth length is the same under the treatment (OJ and VC) if given the same dosage ? in anohter word, do the same dosage of OJ and VC have the same effect on the tooth growth**
+**Assumptions for the test**: 1. these are independent samples for each group. 2. The sample is normally distributed. 3. The population standard deviation is not the same (see appendix 2).  
+**hypothesis teseting**:    
+Null hypothesis ($H_0$): the teeth growth length is the same when given the same dosage of OJ and VC.
+Althernative hypothesis($H_a$) : the teeth growth length is different when given the same dosages of VC and OJ differently.
+
+```{r testC, echo=TRUE,warning=FALSE,message=FALSE,cache=TRUE}
+Dose_pValues<-rbind(
+  t.test(VC0.5, OJ0.5, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(VC1, OJ1, paired = FALSE, var.equal = FALSE)$p.value,
+  t.test(VC2, OJ2, paired = FALSE, var.equal = FALSE)$p.value
+) #compare p-values
+Dose_confidence<-rbind(
+  t.test(VC0.5, OJ0.5, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(VC1, OJ1, paired = FALSE, var.equal = FALSE)$conf.int,
+  t.test(VC2, OJ2, paired = FALSE, var.equal = FALSE)$conf.int
+) #compare 95% Confidence interval
+Dosage_summary<-data.frame(cbind(Dose_pValues,Dose_confidence))
+Dosage_summary$compared.groups<-c("VC0.5~OJ0.5","VC1~OJ1","VC2~OJ2")
+colnames(Dosage_summary)<-c("p.value","low_conf.int","upper_conf.int","compared.groups")
+print(Dosage_summary)
+# write table directly to word document
+rtffile <- RTF("Dosage_summary.doc")  # this can be an .rtf or a .doc
+addParagraph(rtffile, "Table 3 t- statistic for same dose but two different treatment (VC and OJ) ")
+addTable(rtffile, as.data.frame(Dosage_summary))
+done(rtffile)
+```
+**_Interpretation and conclusion for table 3_**: Because the p-value for comparing the two group dose 0.5mg of VC and OJ and the p-valus for comparing 1mg of VC and OJ are smaller than 0.05, therefore, I conclude that the tooth growth length are different when give 0.5mg of OJ or VC. Same conclusion is also true also for 1 mg of OJ and VC. By looking at the 95% confidence interval (CI) for the these paired test, we can see the CI is entirely greater than 0, suggesting **that OJ treatment is slight more effective at dose level 0.5mg and 1mg**. However, the p-value (0.964) for comparing dose level 2mg of VC and OJ is greater than 0.05, suggesting that the tooth growth lengths at 2mg level of VC and OJ is the same. This conclusion is further supported by their 95% confidence interval (-3.64,3.80), which including 0.  
+
+
+####**Summary** (please refer to table 1,2,3 as well as supplmentary figure 1 and table1 in applendice)  
+  
+When we assume the sample are independently taken and the each treated group has normal distribution, we can draw following conclusion about the two treatments and 3 dose levels.
+1. at 5% significance level, I am confident that the tooth growth lengths are greater at the higher dose than the lower dose when given that the OJ treatment.
+2. at 5% significance level, I am confident that the tooth growth lengths are greater at the higher dose than the lower dose when given the VC treatment.
+3. at 5% significance level, that data do not provide sufficient evidence to conclude that a difference exsites between the geniue pigs' tooth growth lengths when given the higher dose (2mg) of OJ and VC.
+4. at 5% significance level, we are confident that there is a difference between tooth growth lengths when given the 0.5 or 1mg doses of OJ and VC. lower lose (0.5 and 1mg) of OJ is more effective in foster tooth growth than VC.  
+
+
+
+~end of the report
+
+$\pagebreak$ 
+
+###**Appendices-supplementary Information for data exploration and innital research**
+1. Data Summary and exploratory analyses
+```{r checkdata,echo=FALSE,cache=TRUE,message=FALSE,warning=FALSE}
+# check out the data
+library(datasets)
+data(ToothGrowth)
+str(ToothGrowth)
+```
+
+```{r summaryfigure, fig.width=8,fig.height=4,fig.align='center',echo=TRUE}
+# make a boxplot for the data for an innitial overview on the data
+require(ggplot2)
+ggplot(ToothGrowth, aes(x=factor(dose),y=len))+
+        geom_boxplot(outlier.size=2,outlier.shape=16,width=0.8)+
+        facet_grid(.~supp)+theme_bw()+ylab("Tooth growth length")+
+        ggtitle("Supplementary Fig.1 Boxplot of two different treatments and various dosages")
+```
+
+```{r summaryfigure, fig.width=8,fig.height=4,fig.align='center',echo=TRUE}
+require(dplyr)
+summarydf<-ToothGrowth%>%group_by(supp,dose)%>%
+        summarise_each(funs(mean(.,na.rm=TRUE),sd(.,na.rm=TRUE)),len)
+# make a lineplot for the data for an innitial overview on the data
+ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
+       geom_line(size=1.5,color="black")+
+        geom_point(size=4,shape=21)+theme_bw()+ylab("Tooth growth length")+xlab("dose(mg)")+
+        ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
+```
+2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
+```{r summaryData, echo=TRUE}
+attach(ToothGrowth)
+#a different way of make a summary data using aggregate()
+ToothGrowth$dose<-as.factor(ToothGrowth$dose)
+toothMean<-aggregate(len~supp+dose,data=ToothGrowth,mean) # caculate the mean 
+toothSd<-aggregate(len~supp+dose,data=ToothGrowth,sd) # caculate the sd 
+toothSummary<-merge(toothMean,toothSd,by=c("supp","dose")) # merge the mean and sd data 
+colnames(toothSummary)<-c("supp","dose","len.mean","len.SD") # set the column name 
+toothSummary$len.mean<-round(toothSummary$len.mean,1)
+toothSummary$len.SD<-round(toothSummary$len.SD,1)
+print(toothSummary)
+detach(ToothGrowth)
+```
