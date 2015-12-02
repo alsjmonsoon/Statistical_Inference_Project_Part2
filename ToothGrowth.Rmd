@@ -1,7 +1,7 @@
 ###Tooth growth length in response to orange juice and ascorbic acid in guinea pigs
 November 21, 2015
 
-####**Oveview**
+####**Overview**
 
 In this Project, I anlayzed the ToothGrowth Data. This data documents the response of the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid). 
 
@@ -127,15 +127,15 @@ When we assume the sample are independently taken and the each treated group has
 
 $\pagebreak$ 
 
-###**Appendices-supplementary Information for data exploration and innital research**
-1. Data Summary and exploratory analyses
+###**Appendices-supplementary Information for data exploration and innital research**  
+1. Data Summary and exploratory analyses  
 ```{r checkdata,echo=FALSE,cache=TRUE,message=FALSE,warning=FALSE}
 # check out the data
 library(datasets)
 data(ToothGrowth)
 str(ToothGrowth)
 ```
-
+  
 ```{r summaryfigure, fig.width=8,fig.height=4,fig.align='center',echo=TRUE}
 # make a boxplot for the data for an innitial overview on the data
 require(ggplot2)
@@ -144,7 +144,7 @@ ggplot(ToothGrowth, aes(x=factor(dose),y=len))+
         facet_grid(.~supp)+theme_bw()+ylab("Tooth growth length")+
         ggtitle("Supplementary Fig.1 Boxplot of two different treatments and various dosages")
 ```
-
+  
 ```{r summaryfigure, fig.width=8,fig.height=4,fig.align='center',echo=TRUE}
 require(dplyr)
 summarydf<-ToothGrowth%>%group_by(supp,dose)%>%
@@ -155,7 +155,7 @@ ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
         geom_point(size=4,shape=21)+theme_bw()+ylab("Tooth growth length")+xlab("dose(mg)")+
         ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
 ```
-  
+ 
 2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
 ```{r summaryData, echo=TRUE}
 attach(ToothGrowth)
