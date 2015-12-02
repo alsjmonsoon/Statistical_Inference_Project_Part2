@@ -156,7 +156,7 @@ ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
         ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
 ```
 
-####2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
+####2. Calculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
 ```{r summaryData, echo=TRUE}
 attach(ToothGrowth)
 #a different way of make a summary data using aggregate()
