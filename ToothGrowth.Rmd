@@ -128,7 +128,7 @@ When we assume the sample are independently taken and the each treated group has
 $\pagebreak$ 
 
 ###**Appendices-supplementary Information for data exploration and innital research**  
-1. Data Summary and exploratory analyses  
+####1. Data Summary and exploratory analyses  
 ```{r checkdata,echo=FALSE,cache=TRUE,message=FALSE,warning=FALSE}
 # check out the data
 library(datasets)
@@ -155,8 +155,8 @@ ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
         geom_point(size=4,shape=21)+theme_bw()+ylab("Tooth growth length")+xlab("dose(mg)")+
         ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
 ```
- 
-2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
+
+####2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
 ```{r summaryData, echo=TRUE}
 attach(ToothGrowth)
 #a different way of make a summary data using aggregate()
