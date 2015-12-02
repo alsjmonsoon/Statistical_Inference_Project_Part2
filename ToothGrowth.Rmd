@@ -155,6 +155,7 @@ ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
         geom_point(size=4,shape=21)+theme_bw()+ylab("Tooth growth length")+xlab("dose(mg)")+
         ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
 ```
+
 2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
 ```{r summaryData, echo=TRUE}
 attach(ToothGrowth)
