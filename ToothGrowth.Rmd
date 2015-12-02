@@ -17,9 +17,9 @@ According to prelimiary analyses above, I tested following hypothesis individual
 
 #####**2a) Test A. Do teeth growths respond to different dosages of ascorbic acid (VC) differently? In another word, when given different dosages of VC, did the teeth growth length differ?**
 **Assumptions for the test**: i). these are independent samples for each group to be tested. ii). The sample for each group is normally distributed. iii). The population standard deviation is not the same (see appendix 2).    
-**hypothesis teseting**    
+**Hypothesis testing**    
 Null hypothesis ($H_0$): the teeth growth length responded to 0.5 and 1 mg, 1 and 2mg, 0.5 and 2mg of VC the same.  
-Althernative hypothesis($H_a$): the teeth growth length responded to different dosages of VC differently.  
+Alternative hypothesis($H_a$): the teeth growth length responded to different dosages of VC differently.  
 Given the sample sizes are small (10 for each dose and the population variance is unknown, t-test would be more appropriate)  
 ```{r testA, echo=TRUE,warning=FALSE,message=FALSE}
 require(dplyr)
@@ -50,10 +50,10 @@ done(rtffile)
 
 
 #####2b)**Test B. Do teeth growths respond to different dosages of orange juice (OJ) differently? In another word, when given different dosages of OJ, did the teeth growth length differ?**
-**Assumptions for the test**: i). these are independent samples for each group; ii). The sample is normally distributed. iii). The population standard deviation is not the same (see appendix 2).  
-**hypothesis teseting**:  
+**Assumptions for the test**: i) these are independent samples for each group; ii) The sample is normally distributed; iii) The population standard deviation is not the same (see appendix 2).    
+**Hypothesis testing**:  
 Null hypothesis ($H_0$): the teeth growth length responded to 0.5 and 1 mg, 1 and 2mg, 0.5 and 2mg of OJ the same.
-Althernative hypothesis($H_a$) : the teeth growth length responded to different dosages of OJ differently.
+Alternative hypothesis($H_a$) : the teeth growth length responded to different dosages of OJ differently.
 Given the sample sizes are small (10) for each dose and the population variance is unknown, t-test would be more appropriate)(please note, that I compared the data in pairs)
 ```{r testB, echo=TRUE,warning=FALSE,message=FALSE,cache=TRUE}
 require(dplyr)
@@ -83,11 +83,11 @@ done(rtffile)
 **_Intrepretation and conclusion for table 2_**: Similarly to VC treatment, the p-value for each compared group of OJ treatment are also smaller than 0.05, this suggest that at 5% significance level, tooth growth length are not equal for 0.5,1, and 2mg OJ treatment. Also, the confidence interval (CI) for each compared groups are greater than 0, that suggests the tooth growth of each compared group are different at 95% CI. Also, all CI are greater than 0, and this confirms **that the higher dosage is more effective than the lower dose OJ treatment** (please note the way I use t.test(), always in the order of high vs. low dose). Please also note the low end of CI (0.19) for OJ2 and OJ1 is quite close to 0, this is probably due to the outlier in the OJ1 group (see supplemenatry figure 1). 
 
 
-#####2c)**Test C. Do teeth growth length is the same under the treatment (OJ and VC) if given the same dosage ? in anohter word, do the same dosage of OJ and VC have the same effect on the tooth growth**
+#####2c)**Test C. Do teeth growth length is the same under the treatment (OJ and VC) if given the same dosage ? in anohter word, do the same dosage of OJ and VC have the same effect on the tooth growth?**
 **Assumptions for the test**: 1. these are independent samples for each group. 2. The sample is normally distributed. 3. The population standard deviation is not the same (see appendix 2).  
-**hypothesis teseting**:    
+**Hypothesis testing**:    
 Null hypothesis ($H_0$): the teeth growth length is the same when given the same dosage of OJ and VC.
-Althernative hypothesis($H_a$) : the teeth growth length is different when given the same dosages of VC and OJ differently.
+Alternative hypothesis($H_a$) : the teeth growth length is different when given the same dosages of VC and OJ differently.
 
 ```{r testC, echo=TRUE,warning=FALSE,message=FALSE,cache=TRUE}
 Dose_pValues<-rbind(
@@ -155,7 +155,7 @@ ggplot(summarydf, aes(x=dose,y=mean,fill=supp))+
         geom_point(size=4,shape=21)+theme_bw()+ylab("Tooth growth length")+xlab("dose(mg)")+
         ggtitle("Supplementary Fig.2 Tooth groth length responde to treatment")
 ```
-
+  
 2. Caculate summary data (mean and sd) for tooth growth length. This step is to see whether the variance are similar for each group and treatment
 ```{r summaryData, echo=TRUE}
 attach(ToothGrowth)
